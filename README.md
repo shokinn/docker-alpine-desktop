@@ -1,5 +1,5 @@
 # docker-alpine-desktop
-A desktop envirunment based on alpine and MATE wich runs in a docker container with a WEB VNC
+A desktop envirunment based on alpine and xfce4 wich runs in a docker container with a WEB VNC
 
 [![Docker Automated build](https://img.shields.io/docker/automated/shokinn/docker-alpine-desktop.svg)](https://hub.docker.com/r/shokinn/docker-alpine-desktop/)
 [![Docker image version](https://images.microbadger.com/badges/version/shokinn/docker-alpine-desktop.svg)](https://microbadger.com/images/shokinn/docker-alpine-desktop)
@@ -8,7 +8,7 @@ A desktop envirunment based on alpine and MATE wich runs in a docker container w
 You can invite me to a beer if you want ;)
 
 
-This is a completely funcional Docker image with a MATE desktop environment.
+This is a completely funcional Docker image with a xfce4 desktop environment.
 
 Based on Alpine Linux, which provides a very small size. 
 
@@ -28,9 +28,9 @@ Sample run command:
 docker run -d --name=alpine-desktop \
 -v /share/Container/alpine-desktop/config:/config \
 -v /share/Container/alpine-desktop/media:/media \
--e GROUP_ID=0 \
--e USER_ID=0 \
--e TZ=Europe/Madrid \
+-e GROUP_ID=1000 \
+-e USER_ID=1000 \
+-e TZ=Europe/Berlin \
 -p 5800:5800 \
 -p 5900:5900 \
 shokinn/alpine-desktop:latest
