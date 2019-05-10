@@ -1,0 +1,23 @@
+[Desktop Entry]
+Type=Application
+Name=FileBot
+Categories=Utility;FileTools;FileManager
+Icon=/opt/filebot/filebot.svg
+MimeType=inode/directory;video/*;audio/*;text/*;application/*;
+Exec=/opt/filebot/filebot %F
+X-XFCE-Source=file:///usr/share/applications/filebot.desktop
+
+[Desktop Action Rename]
+Name=Rename
+Icon=edit-rename
+Exec=/opt/filebot/filebot --mode Rename %F
+
+[Desktop Action Subtitles]
+Name=Subtitles
+Icon=languages
+Exec=/opt/filebot/filebot --mode Subtitles %F
+
+[Desktop Action Checksum]
+Name=Checksum
+Icon=checkmark
+Exec=/opt/filebot/filebot --mode SFV %F

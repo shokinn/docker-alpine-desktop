@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="thunar" version="1.0">
+  <property name="last-view" type="string" value="ThunarDetailsView"/>
+  <property name="last-location-bar" type="string" value="ThunarLocationEntry"/>
+  <property name="last-icon-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_100_PERCENT"/>
+  <property name="last-window-maximized" type="bool" value="true"/>
+  <property name="misc-single-click" type="bool" value="false"/>
+  <property name="default-view" type="string" value="ThunarDetailsView"/>
+  <property name="misc-date-style" type="string" value="THUNAR_DATE_STYLE_CUSTOM"/>
+  <property name="misc-date-custom-style" type="string" value="%Y.%m.%d %H:%M:%S"/>
+  <property name="last-details-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_38_PERCENT"/>
+  <property name="last-details-view-column-widths" type="string" value="140,140,70,106,498,73,110,72,50,139"/>
+  <property name="last-separator-position" type="int" value="176"/>
+  <property name="last-side-pane" type="string" value="ThunarShortcutsPane"/>
+  <property name="misc-middle-click-in-tab" type="bool" value="true"/>
+  <property name="misc-volume-management" type="bool" value="false"/>
+  <property name="last-details-view-visible-columns" type="string" value="THUNAR_COLUMN_DATE_MODIFIED,THUNAR_COLUMN_GROUP,THUNAR_COLUMN_NAME,THUNAR_COLUMN_OWNER,THUNAR_COLUMN_PERMISSIONS,THUNAR_COLUMN_SIZE,THUNAR_COLUMN_TYPE"/>
+  <property name="last-details-view-column-order" type="string" value="THUNAR_COLUMN_NAME,THUNAR_COLUMN_SIZE,THUNAR_COLUMN_TYPE,THUNAR_COLUMN_OWNER,THUNAR_COLUMN_GROUP,THUNAR_COLUMN_PERMISSIONS,THUNAR_COLUMN_DATE_MODIFIED,THUNAR_COLUMN_MIME_TYPE,THUNAR_COLUMN_DATE_ACCESSED,THUNAR_COLUMN_SIZE_IN_BYTES"/>
+  <property name="last-sort-column" type="string" value="THUNAR_COLUMN_NAME"/>
+  <property name="last-sort-order" type="string" value="GTK_SORT_ASCENDING"/>
+</channel>

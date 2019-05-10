@@ -1,0 +1,11 @@
+[Desktop Entry]
+Exec=firefox %u
+Icon=firefox
+Type=Application
+Terminal=false
+Name=Firefox
+GenericName=Web Browser
+MimeType=text/html;
+StartupNotify=true
+Categories=Network;WebBrowser;
+X-XFCE-Source=file:///usr/share/applications/firefox.desktop

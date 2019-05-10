@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=FileZilla
+GenericName=FTP client
+Comment=Download and upload files via FTP, FTPS and SFTP
+Exec=filezilla
+Terminal=false
+Icon=filezilla
+Type=Application
+Categories=Network;FileTransfer;
+Version=1.0
+X-XFCE-Source=file:///usr/share/applications/filezilla.desktop

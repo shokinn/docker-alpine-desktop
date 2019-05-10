@@ -9,20 +9,15 @@
 # -u	Treat unset variables as an error when performing 
 #		parameter expansion. An error message will be written 
 #		to the standard error, and a non-interactive shell will exit. -o nounset
-set -xefu
+set -xef
 
 # Set Environment variables
 export HOME=/home/app
 
-# Copy xfce4 config
-set +f
-xfce_config_base_path='xdg/config/xfce4/xfconf/xfce-perchannel-xml'
-mkdir -p /config/$xfce_config_base_path/
-[ -f "/config/$xfce_config_base_path/xsettings.xml" ] || cp -r /opt/$xfce_config_base_path/* /config/$xfce_config_base_path/
-set -f
 
-# Disable that unset variables are treated as an error.
-set +u
+##
+## xfce foo DONT TOUCH!
+##
 
 # fix broken $UID on some system...
 if test "x$UID" = "x"; then
@@ -168,22 +163,6 @@ if test -d "$XDG_CONFIG_HOME/autostart"; then
 fi
 
 xfdesktop &
-
-# # Set Wallpaper
-# sleep 5
-# xfconf-query -c xfce4-desktop \
-#   -p /backdrop/screen0/monitorscreen/workspace0/last-image \
-#   -s "/usr/share/backgrounds/android_5_lollipop.jpg"
-
-# # Set Icon Theme
-# xfconf-query -c xsettings \
-#   -p /Net/IconThemeName \
-#   -s "Flat-Remix-Green-Dark"
-
-# # Set Theme
-# xfconf-query -c xsettings \
-#   -p /Net/ThemeName \
-#   -s "PRO-dark-XFCE-edition II"
 
 panel=`which xfce4-panel`
 case "x$panel" in

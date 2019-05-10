@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=JDownloader
+Categories=Network;FileTransfer
+Exec=/opt/jre/bin/java -Dawt.useSystemAAFontSettings=gasp -Djava.awt.headless=false -jar /config/JDownloader/JDownloader.jar >/config/logs/JDownloader.log 2>&1 &
+TargetEnvironment=Unity
+Icon=jdownloader
+Terminal=false
+Type=Application
+StartupWMClass=jd-Main
+X-XFCE-Source=file:///usr/share/applications/jdownloader.desktop
+Comment=
+Path=
+StartupNotify=false

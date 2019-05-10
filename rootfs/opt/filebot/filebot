@@ -1,0 +1,81 @@
+#!/bin/sh
+
+# force JVM language and encoding settings
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+# force GTK look and feel
+export GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+
+FILEBOT_HOME=/opt/filebot
+APP_DATA=/config/filebot
+
+# choose archive extractor / media characteristics parser
+ARCHIVE_EXTRACTOR="ShellExecutables"
+MEDIA_PARSER="libmediainfo"
+
+LIBRARY_PATH="/usr/lib"
+
+# options for this container
+CONTAINER_OPTS=" \
+    -DuseGVFS=false \
+    -Xbootclasspath/p:/usr/share/java/jna.jar \
+    -Dapplication.update=skip \
+    -Dprism.verbose=true \
+    -Dprism.order=sw \
+    -Dawt.useSystemAAFontSettings=on \
+"
+
+show_upgrade_info() {
+    APP_NAME=FileBot
+
+    yad \
+        --fixed \
+        --center \
+        --title "$APP_NAME" \
+        --window-icon /opt/novnc/images/icons/master_icon.png \
+        --borders 10 \
+        --image dialog-information \
+        --image-on-top \
+        --text "<b>$APP_NAME Now Requires a License</b>" \
+        --form \
+        --field "Purchase of a license is now required to use all features of $APP_NAME.\n\nFor more information or for instruction on on to revert to the donation supported version of $APP_NAME, please see :\n\n<span foreground=\"blue\">https://github.com/jlesage/docker-filebot</span>:LBL" \
+        --button=gtk-ok:0 > /dev/null 2>&1 || true
+}
+
+start_filebot() {
+    exec /usr/lib/jvm/java-1.8-openjdk/bin/java \
+        -Dapplication.deployment=docker \
+        -Dnet.filebot.license="$APP_DATA/license.psm" \
+        -Dnet.filebot.media.parser="$MEDIA_PARSER" \
+        -Dnet.filebot.archive.extractor="$ARCHIVE_EXTRACTOR" \
+        -Dunixfs=false \
+        -DuseExtendedFileAttributes=true \
+        -DuseCreationDate=false \
+        -Djava.net.useSystemProxies=false \
+        -Djna.nosys=false \
+        -Djna.nounpack=true \
+        -Djna.boot.library.path="$LIBRARY_PATH" \
+        -Djna.library.path="$LIBRARY_PATH" \
+        -Djava.library.path="$LIBRARY_PATH" \
+        -Dapplication.dir="$APP_DATA" \
+        -Dapplication.cache="$APP_DATA/cache" \
+        -Djava.io.tmpdir="$APP_DATA/tmp" \
+        -Dfile.encoding="UTF-8" \
+        -Dsun.jnu.encoding="UTF-8" \
+        -Duser.home="$APP_DATA" \
+        -Djava.util.prefs.PreferencesFactory=net.filebot.util.prefs.FilePreferencesFactory \
+        -Dnet.filebot.util.prefs.file="$APP_DATA/prefs.properties" \
+        $JAVA_OPTS $FILEBOT_OPTS $CONTAINER_OPTS -jar "$FILEBOT_HOME/jar/filebot.jar" "$@"
+}
+
+
+start_filebot '-script fn:sysinfo' >/config/logs/filebot.log 2>&1 &
+
+
+if [ ! -f $APP_DATA/license.psm ]; then
+    show_upgrade_info
+fi
+
+# start filebot
+start_filebot "$@" >/config/logs/filebot.log 2>&1 &
