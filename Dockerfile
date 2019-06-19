@@ -165,8 +165,8 @@ RUN \
 ### Install rclone
 RUN \
 	curl -O ${RCLONE_URL} \
-	&& unzip rclone-current-linux-amd64.zip \
-	&& cd rclone-*-linux-amd64 \
+	&& unzip rclone-${RCLONE_VERSION}-linux-${RCLONE_ARCH}.zip \
+	&& cd rclone-${RCLONE_VERSION}-linux-${RCLONE_ARCH} \
 	&& sudo cp rclone /usr/bin/ \
 	&& sudo chown root:root /usr/bin/rclone \
 	&& sudo chmod 755 /usr/bin/rclone \
