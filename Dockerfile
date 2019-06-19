@@ -114,7 +114,6 @@ RUN \
 		xarchiver \
 		xdotool \
 		xfce4-appfinder \
-		xfce4-mixer \
 		xfce4-panel \
 		xfce4-settings \
 		xfce4-terminal \
