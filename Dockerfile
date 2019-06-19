@@ -1,14 +1,22 @@
 # Set base image
+# https://github.com/jlesage/docker-baseimage-gui
 FROM jlesage/baseimage-gui:alpine-3.9-glibc
 
 # Define software versions.
+# https://github.com/avih/dejsonlz4 -- commit id is version
 ARG JSONLZ4_VERSION=c4305b8
-ARG LZ4_VERSION=1.8.1.2
+# https://github.com/lz4/lz4/releases -- tag is version
+ARG LZ4_VERSION=1.9.1
+# https://docs.aws.amazon.com/de_de/corretto/latest/corretto-8-ug/downloads-list.html
 ARG JAVAJRE_VERSION=8.212.04.2
-ARG RCLONE_VERSION=current
+# https://rclone.org/downloads/
+ARG RCLONE_VERSION=1.48.0
 ARG RCLONE_ARCH=amd64
+# https://www.filebot.net/#download
 ARG FILEBOT_VERSION=4.8.5
+# https://github.com/sgerrand/alpine-pkg-java-openjfx/releases/
 ARG OPENJFX_VERSION=8.151.12-r0
+# https://github.com/acoustid/chromaprint
 ARG CHROMAPRINT_VERSION=1.4.3
 
 # Define software download URLs.
@@ -16,6 +24,7 @@ ARG JSONLZ4_URL=https://github.com/avih/dejsonlz4/archive/${JSONLZ4_VERSION}.tar
 ARG LZ4_URL=https://github.com/lz4/lz4/archive/v${LZ4_VERSION}.tar.gz
 ARG JDOWNLOADER_URL=http://installer.jdownloader.org/JDownloader.jar
 ARG JAVAJRE_URL=https://d3pxv6yz143wms.cloudfront.net/${JAVAJRE_VERSION}/amazon-corretto-${JAVAJRE_VERSION}-linux-x64.tar.gz
+ARG RCLONE_URL=https://downloads.rclone.org/v${RCLONE_VERSION}/rclone-v${RCLONE_VERSION}-linux-${RCLONE_ARCH}.zip
 ARG FILEBOT_URL=https://get.filebot.net/filebot/FileBot_${FILEBOT_VERSION}/FileBot_${FILEBOT_VERSION}-portable.tar.xz
 ARG OPENJFX_URL=https://github.com/sgerrand/alpine-pkg-java-openjfx/releases/download/${OPENJFX_VERSION}/java-openjfx-${OPENJFX_VERSION}.apk
 ARG CHROMAPRINT_URL=https://github.com/acoustid/chromaprint/archive/v${CHROMAPRINT_VERSION}.tar.gz
@@ -156,7 +165,7 @@ RUN \
 ## rclone
 ### Install rclone
 RUN \
-	curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip \
+	curl -O ${RCLONE_URL} \
 	&& unzip rclone-current-linux-amd64.zip \
 	&& cd rclone-*-linux-amd64 \
 	&& sudo cp rclone /usr/bin/ \
