@@ -1,6 +1,7 @@
 # Set base image
 # https://github.com/jlesage/docker-baseimage-gui
-FROM jlesage/baseimage-gui:alpine-3.10-glibc
+ARG ALPINE_VERSION=3.10
+FROM jlesage/baseimage-gui:alpine-${ALPINE_VERSION}-glibc
 
 # Define software versions.
 # https://github.com/avih/dejsonlz4 -- commit id is version
@@ -40,9 +41,8 @@ RUN \
 
 # Add Repos permanently
 RUN \
-	echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositories && \
-	echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
-	echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+	echo "http://dl-cdn.alpinelinux.org/alpine/${ALPINE_VERSION}/main" > /etc/apk/repositories && \
+	echo "http://dl-cdn.alpinelinux.org/alpine/${ALPINE_VERSION}/community" >> /etc/apk/repositories
 
 # Upgrade current packages
 RUN \
