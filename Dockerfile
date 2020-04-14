@@ -10,7 +10,7 @@ ARG JSONLZ4_VERSION=c4305b8
 # https://github.com/lz4/lz4/releases -- tag is version
 ARG LZ4_VERSION=1.9.2
 # https://docs.aws.amazon.com/de_de/corretto/latest/corretto-8-ug/downloads-list.html
-ARG JAVAJRE_VERSION=8.242.08.2
+ARG JAVAJRE_VERSION=8.212.04.2
 # https://rclone.org/downloads/
 ARG RCLONE_VERSION=1.51.0
 ARG RCLONE_ARCH=amd64
@@ -37,17 +37,17 @@ WORKDIR /tmp
 
 # Add Repos permanently
 RUN \
-	echo "http://dl-cdn.alpinelinux.org/alpine/${ALPINE_VERSION}/main" > /etc/apk/repositories && \
-	echo "http://dl-cdn.alpinelinux.org/alpine/${ALPINE_VERSION}/community" >> /etc/apk/repositories
+	echo "http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/main" > /etc/apk/repositories && \
+	echo "http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/community" >> /etc/apk/repositories
+
+# Upgrade current packages
+RUN \
+	apk --update --no-cache upgrade
 
 # Generate and install favicons.
 RUN \
 	APP_ICON_URL=https://github.com/xfce-mirror/xfdesktop/raw/master/pixmaps/xfce4_xicon1.png \
 	&& install_app_icon.sh "$APP_ICON_URL"
-
-# Upgrade current packages
-RUN \
-	apk --update --no-cache upgrade
 
 # Install console packages
 RUN \
@@ -145,7 +145,7 @@ RUN \
 	apk --no-cache add \
 		chromium \
 		filezilla \
-		firefox 
+		firefox-esr 
 
 ## Firefox
 ### TODO - Firefox plugins
@@ -187,7 +187,7 @@ RUN \
 	# Install.
 	&& mkdir /opt/filebot \
 	&& cp -Rv filebot/jar /opt/filebot/ \
-	&& wget https://raw.githubusercontent.com/filebot/filebot/master/installer/snap/snap/gui/filebot.svg -O /opt/filebot/filebot.svg \
+	&& wget https://www.filebot.net/images/filebot.logo.svg -O /opt/filebot/filebot.svg \
 	# Cleanup.
 	&& rm -rf /tmp/* /tmp/.[!.]*
 
