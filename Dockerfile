@@ -1,19 +1,19 @@
 # Set base image
 # https://github.com/jlesage/docker-baseimage-gui
-FROM jlesage/baseimage-gui:alpine-3.9-glibc
+FROM jlesage/baseimage-gui:alpine-3.10-glibc
 
 # Define software versions.
 # https://github.com/avih/dejsonlz4 -- commit id is version
 ARG JSONLZ4_VERSION=c4305b8
 # https://github.com/lz4/lz4/releases -- tag is version
-ARG LZ4_VERSION=1.9.1
+ARG LZ4_VERSION=1.9.2
 # https://docs.aws.amazon.com/de_de/corretto/latest/corretto-8-ug/downloads-list.html
-ARG JAVAJRE_VERSION=8.212.04.2
+ARG JAVAJRE_VERSION=8.242.08.2
 # https://rclone.org/downloads/
-ARG RCLONE_VERSION=1.48.0
+ARG RCLONE_VERSION=1.51.0
 ARG RCLONE_ARCH=amd64
 # https://www.filebot.net/#download
-ARG FILEBOT_VERSION=4.8.5
+ARG FILEBOT_VERSION=4.9.1
 # https://github.com/sgerrand/alpine-pkg-java-openjfx/releases/
 ARG OPENJFX_VERSION=8.151.12-r0
 # https://github.com/acoustid/chromaprint
