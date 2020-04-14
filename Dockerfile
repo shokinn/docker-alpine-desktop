@@ -1,9 +1,10 @@
 # Set base image
 # https://github.com/jlesage/docker-baseimage-gui
-ARG ALPINE_VERSION=3.10
-FROM jlesage/baseimage-gui:alpine-${ALPINE_VERSION}-glibc
+FROM jlesage/baseimage-gui:alpine-3.10-glibc
 
 # Define software versions.
+# Alpine version
+ARG ALPINE_VERSION=3.10
 # https://github.com/avih/dejsonlz4 -- commit id is version
 ARG JSONLZ4_VERSION=c4305b8
 # https://github.com/lz4/lz4/releases -- tag is version
@@ -34,15 +35,15 @@ ARG CHROMAPRINT_URL=https://github.com/acoustid/chromaprint/archive/v${CHROMAPRI
 # Define working directory.
 WORKDIR /tmp
 
-# Generate and install favicons.
-RUN \
-	APP_ICON_URL=https://github.com/xfce-mirror/xfdesktop/raw/master/pixmaps/xfce4_xicon1.png \
-	&& install_app_icon.sh "$APP_ICON_URL"
-
 # Add Repos permanently
 RUN \
 	echo "http://dl-cdn.alpinelinux.org/alpine/${ALPINE_VERSION}/main" > /etc/apk/repositories && \
 	echo "http://dl-cdn.alpinelinux.org/alpine/${ALPINE_VERSION}/community" >> /etc/apk/repositories
+
+# Generate and install favicons.
+RUN \
+	APP_ICON_URL=https://github.com/xfce-mirror/xfdesktop/raw/master/pixmaps/xfce4_xicon1.png \
+	&& install_app_icon.sh "$APP_ICON_URL"
 
 # Upgrade current packages
 RUN \
