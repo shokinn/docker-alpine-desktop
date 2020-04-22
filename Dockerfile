@@ -16,8 +16,9 @@ ARG RCLONE_VERSION=1.51.0
 ARG RCLONE_ARCH=amd64
 # https://www.filebot.net/#download
 ARG FILEBOT_VERSION=4.9.1
-# https://github.com/sgerrand/alpine-pkg-java-openjfx/releases/
-ARG OPENJFX_VERSION=8.151.12-r0
+# Azul OpenJDK
+ARG OPENJDK_VERSION=13.0.2
+ARG ZULU_OPENJDK_VERSION=13.29.9
 # https://github.com/acoustid/chromaprint
 ARG CHROMAPRINT_VERSION=1.4.3
 
@@ -28,7 +29,7 @@ ARG JDOWNLOADER_URL=http://installer.jdownloader.org/JDownloader.jar
 ARG JAVAJRE_URL=https://d3pxv6yz143wms.cloudfront.net/${JAVAJRE_VERSION}/amazon-corretto-${JAVAJRE_VERSION}-linux-x64.tar.gz
 ARG RCLONE_URL=https://downloads.rclone.org/v${RCLONE_VERSION}/rclone-v${RCLONE_VERSION}-linux-${RCLONE_ARCH}.zip
 ARG FILEBOT_URL=https://get.filebot.net/filebot/FileBot_${FILEBOT_VERSION}/FileBot_${FILEBOT_VERSION}-portable.tar.xz
-ARG OPENJFX_URL=https://github.com/sgerrand/alpine-pkg-java-openjfx/releases/download/${OPENJFX_VERSION}/java-openjfx-${OPENJFX_VERSION}.apk
+ARG OPENJDK_URL=https://cdn.azul.com/zulu/bin/zulu${ZULU_OPENJDK_VERSION}-ca-jdk${OPENJDK_VERSION}-linux_musl_x64.tar.gz
 ARG CHROMAPRINT_URL=https://github.com/acoustid/chromaprint/archive/v${CHROMAPRINT_VERSION}.tar.gz
 
 
@@ -75,7 +76,6 @@ RUN \
 		mdocml-apropos \
 		nano \
 		nss \
-		openjdk8-jre \
 		p7zip \
 		p7zip-doc \
 		python3 \
@@ -191,13 +191,29 @@ RUN \
 	# Cleanup.
 	&& rm -rf /tmp/* /tmp/.[!.]*
 
-### Install dependencies.
+### Install Filebot dependencies.
+# Build custom Java runtime image.
 RUN \
-	# OpenJFX
-	curl -# -L -o java-openjfx.apk ${OPENJFX_URL} \
-	&& apk --no-cache add --allow-untrusted ./java-openjfx.apk \
-	# Cleanup.
-	&& rm -rf /tmp/* /tmp/.[!.]*
+    mkdir /tmp/jdk/ && \
+    # Download and extract.
+    curl -# -L "${OPENJDK_URL}" | tar xz --strip 1 -C /tmp/jdk && \
+    # Extract Java module dependencies.
+    for JAR in /opt/filebot/jar/*.jar; do \
+        echo "Getting dependencies of $JAR..."; \
+        /tmp/jdk/bin/jdeps $JAR 2>/dev/null | grep -v $(basename $JAR) | grep -v 'JDK internal API' | grep -v 'not found' | awk '{ print $4 }'| sort -u >> /tmp/jdeps; \
+    done && \
+    echo jdk.crypto.ec >> /tmp/jdeps && \
+    echo jdk.zipfs >> /tmp/jdeps && \
+    echo jdk.unsupported >> /tmp/jdeps && \
+    # Create a minimal Java install.
+    /tmp/jdk/bin/jlink \
+        --compress=2 \
+        --module-path /tmp/jdk/jmods \
+        --add-modules "$(cat /tmp/jdeps | sort -u | tr '\n' ',')" \
+        --output /opt/filebot/jre \
+        && \
+    # Cleanup.
+    rm -rf /tmp/* /tmp/.[!.]*
 
 ### Build and install chromaprint (fpcalc) for AcousItD.
 RUN \
@@ -226,7 +242,6 @@ RUN \
 	&& del-pkg build-dependencies \
 	&& rm	/usr/lib/pkgconfig/libchromaprint.pc \
 			/usr/include/chromaprint.h \
-	&& rmdir /usr/lib/pkgconfig \
 	&& rm -rf /tmp/* /tmp/.[!.]*
 
 
