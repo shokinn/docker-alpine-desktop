@@ -8,7 +8,7 @@ export LC_ALL="en_US.UTF-8"
 export GNOME_DESKTOP_SESSION_ID=this-is-deprecated
 
 FILEBOT_HOME=/opt/filebot
-APP_DATA=/config
+APP_DATA=/config/filebot
 
 # choose archive extractor / media characteristics parser
 ARCHIVE_EXTRACTOR="ShellExecutables"
