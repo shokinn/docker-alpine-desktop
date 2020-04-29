@@ -20,6 +20,8 @@ ARG FILEBOT_VERSION=4.9.1
 ARG OPENJFX_VERSION=8.151.12-r0
 # https://github.com/acoustid/chromaprint
 ARG CHROMAPRINT_VERSION=1.4.3
+# MediaInfo version
+ARG MEDIAINFO_VERSION=20.03
 
 # Define software download URLs.
 ARG JSONLZ4_URL=https://github.com/avih/dejsonlz4/archive/${JSONLZ4_VERSION}.tar.gz
@@ -30,6 +32,7 @@ ARG RCLONE_URL=https://downloads.rclone.org/v${RCLONE_VERSION}/rclone-v${RCLONE_
 ARG FILEBOT_URL=https://get.filebot.net/filebot/FileBot_${FILEBOT_VERSION}/FileBot_${FILEBOT_VERSION}-portable-jdk8.tar.xz
 ARG OPENJFX_URL=https://github.com/sgerrand/alpine-pkg-java-openjfx/releases/download/${OPENJFX_VERSION}/java-openjfx-${OPENJFX_VERSION}.apk
 ARG CHROMAPRINT_URL=https://github.com/acoustid/chromaprint/archive/v${CHROMAPRINT_VERSION}.tar.gz
+ARG MEDIAINFO_URL=https://mediaarea.net/download/binary/mediainfo-gui/${MEDIAINFO_VERSION}/MediaInfo_GUI_${MEDIAINFO_VERSION}_GNU_FromSource.tar.gz
 
 
 # Define working directory.
@@ -73,12 +76,17 @@ RUN \
 		man-pages \
 		mc \
 		mdocml-apropos \
+		mesa-dri-swrast \
+		mediainfo \
 		nano \
 		nss \
 		openjdk8-jre \
 		p7zip \
 		p7zip-doc \
 		python3 \
+		py3-qt5 \
+		qt5-qtbase \
+		qt5-qtsvg \
 		rsync \
 		rtmpdump \
 		screen \
@@ -91,6 +99,7 @@ RUN \
 		util-linux \
 		vim \
 		wget \
+		wxgtk \
 		xz \
 		xz-doc \
 		zip \
@@ -222,10 +231,39 @@ RUN \
 	&& cd .. \
 	# Cleanup.
 	&& del-pkg build-dependencies \
-	&& rm -rf /usr/include \
-			/usr/lib/pkgconfig \
 	&& rm -rf /tmp/* /tmp/.[!.]*
 
+## Install Mediainfo
+RUN \
+	add-pkg --virtual build-dependencies \
+		build-base \
+		qt5-qtbase-dev \
+		libmediainfo-dev \
+		wxgtk-dev \
+	&& echo "Downloading MediaInfo package..." \
+	&& mkdir mediainfo \
+	&& curl -# -L ${MEDIAINFO_URL} | tar xz --strip 1 -C mediainfo \
+	# Compile.
+	&& cd mediainfo \
+	&& ./GUI_Compile.sh \
+	&& cd MediaInfo/Project/GNU/GUI \
+	&& make install \
+	# Install
+	&& strip -v /usr/local/bin/mediainfo-gui \
+	# Cleanup.
+	&& del-pkg build-dependencies \
+	&& rm -rf /tmp/* /tmp/.[!.]*
+
+## Install dottorrent-gui
+RUN \
+	add-pkg --virtual build-dependencies \
+		build-base \
+		python3-dev \
+		qt5-qtbase-dev \
+	&& echo "Installing dottorrent-gui" \
+	&& pip3 install dottorrent-gui \
+	&& del-pkg build-dependencies \
+	&& rm -rf /tmp/* /tmp/.[!.]*
 
 # Add files.
 COPY rootfs/ /
