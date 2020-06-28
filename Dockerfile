@@ -1,10 +1,10 @@
 # Set base image
 # https://github.com/jlesage/docker-baseimage-gui
-FROM jlesage/baseimage-gui:alpine-3.10-glibc
+FROM jlesage/baseimage-gui:alpine-3.12-glibc
 
 # Define software versions.
 # Alpine version
-ARG ALPINE_VERSION=3.10
+ARG ALPINE_VERSION=3.12
 # https://github.com/avih/dejsonlz4 -- commit id is version
 ARG JSONLZ4_VERSION=c4305b8
 # https://github.com/lz4/lz4/releases -- tag is version
@@ -72,10 +72,11 @@ RUN \
 		libgcc \
 		libmediainfo \
 		libstdc++ \
-		man \
+		mandoc \
+		mandoc-apropos \
+		mandoc-soelim \
 		man-pages \
 		mc \
-		mdocml-apropos \
 		mesa-dri-swrast \
 		mediainfo \
 		nano \
@@ -84,6 +85,7 @@ RUN \
 		p7zip \
 		p7zip-doc \
 		python3 \
+		py3-pip \
 		py3-qt5 \
 		qt5-qtbase \
 		qt5-qtsvg \
@@ -154,7 +156,8 @@ RUN \
 	apk --no-cache add \
 		chromium \
 		filezilla \
-		firefox-esr 
+		firefox-esr \
+		picard
 
 ## Firefox
 ### TODO - Firefox plugins
