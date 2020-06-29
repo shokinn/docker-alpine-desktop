@@ -1,11 +1,11 @@
 [Desktop Entry]
-Exec=firefox %u
-Icon=firefox
-Type=Application
-Terminal=false
-Name=Firefox
+Name=Chromium
 GenericName=Web Browser
-MimeType=text/html;
-StartupNotify=true
-Categories=Network;WebBrowser;
-X-XFCE-Source=file:///usr/share/applications/firefox.desktop
+Comment=Access the Internet
+Exec=chromium-browser %U
+Terminal=false
+Icon=chromium
+Type=Application
+Categories=GTK;Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;
+X-XFCE-Source=file:///usr/share/applications/chromium.desktop

@@ -16,14 +16,14 @@ ARG RCLONE_VERSION=1.51.0
 ARG RCLONE_ARCH=amd64
 # https://www.filebot.net/#download
 ARG FILEBOT_VERSION=4.9.1
-# Firefox version
-ARG FIREFOX_VERSION=77.0.1-r4
 # OpenJFX
 ARG OPENJFX_VERSION=8.151.12-r0
 # https://github.com/acoustid/chromaprint
 ARG CHROMAPRINT_VERSION=1.4.3
 # MediaInfo version
 ARG MEDIAINFO_VERSION=20.03
+# Notepadqq verions
+ARG NOTEPADQQ_VERSION=1.4.8-r1
 
 # Define software download URLs.
 ARG JSONLZ4_URL=https://github.com/avih/dejsonlz4/archive/${JSONLZ4_VERSION}.tar.gz
@@ -160,37 +160,10 @@ RUN \
 		filezilla \
 		picard
 
-# Install JSONLZ4 tools.
-RUN \
-	add-pkg --virtual build-dependencies \
-		curl \
-		build-base \
-		&& \
-	mkdir jsonlz4 && \
-	mkdir lz4 && \
-	curl -# -L {$JSONLZ4_URL} | tar xz --strip 1 -C jsonlz4 && \
-	curl -# -L {$LZ4_URL} | tar xz --strip 1 -C lz4 && \
-	mv jsonlz4/src/ref_compress/*.c jsonlz4/src/ && \
-	cp lz4/lib/lz4.* jsonlz4/src/ && \
-	cd jsonlz4 && \
-	gcc -static -Wall -o dejsonlz4 src/dejsonlz4.c src/lz4.c && \
-	gcc -static -Wall -o jsonlz4 src/jsonlz4.c src/lz4.c && \
-	strip dejsonlz4 jsonlz4 && \
-	cp -v dejsonlz4 /usr/bin/ && \
-	cp -v jsonlz4 /usr/bin/ && \
-	cd .. && \
-	# Cleanup.
-	del-pkg build-dependencies && \
-	rm -rf /tmp/* /tmp/.[!.]*
-
-# Install Firefox
+# Install Notepadqq
 Run \
-	add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-			--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
-			--upgrade firefox=${FIREFOX_VERSION}
-
-## Firefox
-### TODO - Firefox plugins
+	add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+			--upgrade notepadqq=${NOTEPADQQ_VERSION}
 
 ## JDownloader 2
 ### Download JDownloader 2.
