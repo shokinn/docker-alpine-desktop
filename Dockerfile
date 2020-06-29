@@ -8,7 +8,7 @@ ARG ALPINE_VERSION=3.12
 # https://github.com/avih/dejsonlz4 -- commit id is version
 ARG JSONLZ4_VERSION=c4305b8
 # https://github.com/lz4/lz4/releases -- tag is version
-ARG LZ4_VERSION=1.9.2
+ARG LZ4_VERSION=1.8.1.2
 # https://docs.aws.amazon.com/de_de/corretto/latest/corretto-8-ug/downloads-list.html
 ARG JAVAJRE_VERSION=8.212.04.2
 # https://rclone.org/downloads/
@@ -16,6 +16,8 @@ ARG RCLONE_VERSION=1.51.0
 ARG RCLONE_ARCH=amd64
 # https://www.filebot.net/#download
 ARG FILEBOT_VERSION=4.9.1
+# Firefox version
+ARG FIREFOX_VERSION=77.0.1-r4
 # OpenJFX
 ARG OPENJFX_VERSION=8.151.12-r0
 # https://github.com/acoustid/chromaprint
@@ -156,8 +158,36 @@ RUN \
 	apk --no-cache add \
 		chromium \
 		filezilla \
-		firefox-esr \
 		picard
+
+# Install JSONLZ4 tools.
+RUN \
+	add-pkg --virtual build-dependencies \
+		curl \
+		build-base \
+		&& \
+	mkdir jsonlz4 && \
+	mkdir lz4 && \
+	curl -# -L {$JSONLZ4_URL} | tar xz --strip 1 -C jsonlz4 && \
+	curl -# -L {$LZ4_URL} | tar xz --strip 1 -C lz4 && \
+	mv jsonlz4/src/ref_compress/*.c jsonlz4/src/ && \
+	cp lz4/lib/lz4.* jsonlz4/src/ && \
+	cd jsonlz4 && \
+	gcc -static -Wall -o dejsonlz4 src/dejsonlz4.c src/lz4.c && \
+	gcc -static -Wall -o jsonlz4 src/jsonlz4.c src/lz4.c && \
+	strip dejsonlz4 jsonlz4 && \
+	cp -v dejsonlz4 /usr/bin/ && \
+	cp -v jsonlz4 /usr/bin/ && \
+	cd .. && \
+	# Cleanup.
+	del-pkg build-dependencies && \
+	rm -rf /tmp/* /tmp/.[!.]*
+
+# Install Firefox
+Run \
+	add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+			--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
+			--upgrade firefox=${FIREFOX_VERSION}
 
 ## Firefox
 ### TODO - Firefox plugins
