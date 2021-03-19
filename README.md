@@ -37,7 +37,7 @@ docker run -d --name=alpine-desktop \
 --shm-size 2g \
 -p 5800:5800 \
 -p 5900:5900 \
-shokinn/alpine-desktop:latest
+shokinn/docker-alpine-desktop:latest
 ```
 
 docker run --rm -p 5800:5800 -p 5900:5900 -v /Users/phg/Downloads/config:/config -e RCLONE_CONFIG_REMOTE=plexdrive_crypt --cap-add SYS_ADMIN --device /dev/fuse docker-alpine-desktop:latest
