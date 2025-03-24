@@ -1,3 +1,7 @@
+# DEPRECATION NOTICE
+> [!warning]
+> This repository is deprecated and won't be updated anymore!
+
 # docker-alpine-desktop
 A desktop envirunment based on alpine and xfce4 wich runs in a docker container with a WEB VNC
 
